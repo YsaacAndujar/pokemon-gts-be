@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from './guards';
 import { PokemonMockupModule } from './modules/pokemon-mockup/pokemon-mockup.module';
+import { PaginationService } from './services';
 
 @Module({
   imports: [AuthModule,
@@ -23,6 +24,7 @@ import { PokemonMockupModule } from './modules/pokemon-mockup/pokemon-mockup.mod
       provide: 'APP_GUARD',
       useClass: AuthGuard,
     },
+    PaginationService,
   ],
 })
 export class AppModule {}
