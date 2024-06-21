@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository, } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
+import { GetPaginatedPokemons } from './dto/GetPaginatedPokemons.dto';
 import { Pokemon, PokemonType } from './entities';
+import { PaginationService } from 'src/services';
 
 @Injectable()
 export class PokemonMockupService {
@@ -10,6 +12,7 @@ export class PokemonMockupService {
         private readonly pokemonRepository: Repository<Pokemon>,
         @InjectRepository(PokemonType)
         private readonly pokemonTypesRepository: Repository<PokemonType>,
+        private readonly paginationService: PaginationService
     ) {}
     async seed() {
 
@@ -83,4 +86,8 @@ export class PokemonMockupService {
           await this.pokemonRepository.save(pokemon);
 
     }
+    
+    async findAll(filter: GetPaginatedPokemons) {
+        return await this.paginationService.paginate(this.pokemonRepository, filter,{relations: ['types'],} )
+      }
 }
