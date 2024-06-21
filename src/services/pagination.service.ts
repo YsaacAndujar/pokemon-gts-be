@@ -5,30 +5,29 @@ import { FindManyOptions, Repository } from 'typeorm'
 @Injectable()
 export class PaginationService {
 
-    protected createOrderQuery() {
-        const order: any = {};
-    
-        order.id = 'DESC';
-        return order;
-      }
-    
+  async paginate<T>(
+    repository: Repository<T>,
+    { take, page }: GenericGetPaginatedDto,
+    findManyOptions?: FindManyOptions<T>,
+  ) {
+    const metadata = repository.metadata;
+    const hasIdColumn = metadata.columns.some(column => column.propertyName === 'id');
 
-    async paginate<T>(
-        repository: Repository<T>,
-        {take, page}: GenericGetPaginatedDto,
-        findManyOptions?: FindManyOptions<T>,
-      ) {
-        const [result, total] = await repository.findAndCount({
-          order: this.createOrderQuery(),
-          ...findManyOptions,
-              take: take,
-              skip: (page-1)*take,
-          });
-    
-        return {
-          result,
-          total
-        }
+    const queryOptions: FindManyOptions<T> = {
+      ...findManyOptions,
+      take: take,
+      skip: (page - 1) * take,
+    };
 
-      }
+    if (hasIdColumn) {
+      queryOptions.order = { id: 'DESC' } as any;
+    }
+
+    const [result, total] = await repository.findAndCount(queryOptions);
+
+    return {
+      result,
+      total,
+    };
+  }
 }
