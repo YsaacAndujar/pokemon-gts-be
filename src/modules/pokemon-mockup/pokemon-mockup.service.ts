@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository, } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Pokemon, PokemonType } from './entities';
 
 @Injectable()
@@ -76,7 +76,7 @@ export class PokemonMockupService {
         }
         const types = await this.pokemonTypesRepository.find({
             where:{
-                name: data.types.map((type)=> type.type.name)
+                name: In(data.types.map((type)=> type.type.name))
             }
         })
         pokemon.types = types;

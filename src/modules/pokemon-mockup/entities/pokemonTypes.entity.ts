@@ -10,7 +10,6 @@ export class PokemonType {
     name: string;    
 
     @ManyToMany(() => Pokemon, pokemon => pokemon.types)
-    @JoinTable()
     pokemons: Pokemon[];
 }
 
