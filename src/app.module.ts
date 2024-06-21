@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from './guards';
+import { PokemonMockupModule } from './modules/pokemon-mockup/pokemon-mockup.module';
 
 @Module({
   imports: [AuthModule,
@@ -13,6 +14,7 @@ import { AuthGuard } from './guards';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    PokemonMockupModule,
   ],
   controllers: [AppController],
   providers: [
