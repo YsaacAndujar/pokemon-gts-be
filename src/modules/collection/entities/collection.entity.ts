@@ -7,10 +7,10 @@ export class Collection {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Pokemon, pokemon => pokemon.collections)
+    @ManyToOne(() => Pokemon, pokemon => pokemon.collections, {onDelete: 'CASCADE'})
     pokemon: Pokemon;
 
-    @ManyToOne(() => User, user => user.userCodes)
+    @ManyToOne(() => User, user => user.userCodes, {onDelete: 'CASCADE'})
     user: User;
 }
 
