@@ -89,7 +89,6 @@ export class PokemonMockupService {
     
     async findAll(filter: GetPaginatedPokemons) {
         let where: FindOptionsWhere<Pokemon> = {};
-        console.log(filter)
         if (filter.id) {
           where.id = filter.id
         }
