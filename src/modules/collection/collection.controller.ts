@@ -11,17 +11,17 @@ export class CollectionController {
   constructor(private readonly collectionService: CollectionService) {}
 
   @Post('add-pokemon')
-  addPokemon(@Body() dto: AddPokemonDto, @Req() request) {
-    return this.collectionService.addPokemon(dto, request.user.userId);
+  async addPokemon(@Body() dto: AddPokemonDto, @Req() request) {
+    return await this.collectionService.addPokemon(dto, request.user.userId);
   }
 
   @Delete('remove-pokemon/:id')
-  remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
-    return this.collectionService.removePokemon(id, request.user.userId);
+  async remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    return await this.collectionService.removePokemon(id, request.user.userId);
   }
   
   @Get()
-  findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginated) {
-    return this.collectionService.findAllMine(dto, request.user.userId);
+  async findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginated) {
+    return await this.collectionService.findAllMine(dto, request.user.userId);
   }
 }
