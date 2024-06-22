@@ -1,10 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsNumber, IsOptional } from "class-validator";
-import { GenericGetPaginatedDto } from "src/generic/dto";
+import { GenericGetPaginatedDto } from "./GenericGetPaginated.dto";
 
-
-export class GetPaginatedPokemons extends GenericGetPaginatedDto {
+export class GenericGetPokemonPaginated extends GenericGetPaginatedDto {
     @ApiProperty({ required: false })
     @IsOptional()
     name?: string;

@@ -2,7 +2,8 @@ import { Controller, Get, Post, Query } from '@nestjs/common';
 import { PokemonMockupService } from './pokemon-mockup.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/decorators/public.decorator';
-import { GetPaginatedPokemons } from './dto/GetPaginatedPokemons.dto';
+import { GenericGetPokemonPaginated } from 'src/generic/dto';
+
 
 @Controller('pokemon-mockup')
 @ApiTags('Pokemon Mockup')
@@ -17,7 +18,7 @@ export class PokemonMockupController {
   }
   
   @Get()
-  async findAll(@Query() dto: GetPaginatedPokemons) {
+  async findAll(@Query() dto: GenericGetPokemonPaginated) {
     return await this.pokemonMockupService.findAll(dto)
   }
   
