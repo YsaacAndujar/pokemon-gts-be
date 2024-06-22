@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository, } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { PaginationService } from 'src/services';
+import { FindOptionsWhere, ILike, In, Repository } from 'typeorm';
 import { GetPaginatedPokemons } from './dto/GetPaginatedPokemons.dto';
 import { Pokemon, PokemonType } from './entities';
-import { PaginationService } from 'src/services';
 
 @Injectable()
 export class PokemonMockupService {
@@ -88,6 +88,22 @@ export class PokemonMockupService {
     }
     
     async findAll(filter: GetPaginatedPokemons) {
-        return await this.paginationService.paginate(this.pokemonRepository, filter,{relations: ['types'],} )
+        let where: FindOptionsWhere<Pokemon> = {};
+        console.log(filter)
+        if (filter.id) {
+          where.id = filter.id
+        }
+        if (filter.name) {
+          where.name=ILike(`%${filter.name}%`)
+        }
+        if (filter.type) {
+          where.types = {id:filter.type}
+        }
+        
+
+        return await this.paginationService.paginate(this.pokemonRepository, filter,{
+            where,
+            relations: ['types'],
+        } )
       }
 }
