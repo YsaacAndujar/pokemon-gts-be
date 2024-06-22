@@ -36,10 +36,11 @@ export class TradesService {
       where:{
         user: { id: userId },
         collection: {
+          user: { id: userId },
           pokemon: createPokemonWhereFilter(filter)
         }
       },
-      relations: ['collection', 'collection.pokemon',],
+      relations: ['collection.pokemon',],
     })
   }
 
@@ -75,18 +76,23 @@ export class TradesService {
       })
 
       if (pokemons.length != pokemonsWanted.length) throw new BadRequestException("Some pokemons wanted doesn't exists")
-      const userRepository = transactionalEntityManager.getRepository(User)
-      const user = await userRepository.findOne({ where: { id: userId } })
+
       await tradeRepository.save({
-        user,
         collection,
-        pokemons
+        pokemonsWanted:pokemons
       })
     })
   }
 
   async removeTrade(id: number, userId: number) {
-    const trade = await this.nonTransactionalTradeRepository.findOne({ where: { id, user:{id:userId} } })
+    const trade = await this.nonTransactionalTradeRepository.findOne({ 
+      where: { 
+        id, 
+        collection:{
+          user: {id:userId}
+        } 
+      } 
+    })
     if (!trade) return
     await this.nonTransactionalTradeRepository.delete(id)
     

@@ -16,11 +16,7 @@ export class Trade {
     @JoinColumn()
     collection: Collection;
     
-    @ManyToOne(() => User, { cascade: true })
-    @JoinColumn()
-    user: User;
-
     @ManyToMany(() => Pokemon, { cascade: true })
     @JoinTable()
-    pokemons: Pokemon[];
+    pokemonsWanted: Pokemon[];
 }
