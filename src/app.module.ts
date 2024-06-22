@@ -7,6 +7,7 @@ import { AuthGuard } from './guards';
 import { PokemonMockupModule } from './modules/pokemon-mockup/pokemon-mockup.module';
 import { PaginationService } from './services';
 import { CollectionModule } from './modules/collection/collection.module';
+import { TradesModule } from './modules/trades/trades.module';
 
 @Module({
   imports: [AuthModule,
@@ -18,6 +19,7 @@ import { CollectionModule } from './modules/collection/collection.module';
     }),
     PokemonMockupModule,
     CollectionModule,
+    TradesModule,
   ],
   controllers: [AppController],
   providers: [
