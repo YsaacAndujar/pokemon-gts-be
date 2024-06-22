@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
 import { TradesService } from './trades.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AddTradeDto } from './dto/add-trade.dto';
@@ -20,4 +20,8 @@ export class TradesController {
     return await this.tradesService.findAllMine(dto, request.user.userId);
   }
   
+  @Delete('my-trades/:id')
+  async remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    return await this.tradesService.removeTrade(id, request.user.userId);
+  }
 }

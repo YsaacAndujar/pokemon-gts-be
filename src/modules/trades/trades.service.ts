@@ -29,6 +29,7 @@ export class TradesService {
 
     private readonly entityManager: EntityManager,
   ) { }
+  
   async findAllMine(filter: GenericGetPokemonPaginated, userId: number) {
     
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
@@ -41,6 +42,7 @@ export class TradesService {
       relations: ['collection', 'collection.pokemon',],
     })
   }
+
   async addTrade({ collectionId, pokemonsWanted }: AddTradeDto, userId: number) {
     await this.entityManager.transaction(async (transactionalEntityManager) => {
 
@@ -81,6 +83,13 @@ export class TradesService {
         pokemons
       })
     })
+  }
+
+  async removeTrade(id: number, userId: number) {
+    const trade = await this.nonTransactionalTradeRepository.findOne({ where: { id, user:{id:userId} } })
+    if (!trade) return
+    await this.nonTransactionalTradeRepository.delete(id)
+    
   }
 
 }
