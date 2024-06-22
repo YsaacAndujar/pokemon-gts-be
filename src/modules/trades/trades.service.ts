@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, EntityManager, In, Not } from 'typeorm'
-import { Trade } from './entities';
+import { Trade, TradeRequest } from './entities';
 import { Collection } from '../collection/entities/collection.entity';
 import { PaginationService } from 'src/services';
 import { User } from '../auth/entities';
 import { Pokemon } from '../pokemon-mockup/entities';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
-import { AddTradeDto, GetTradesDto } from './dto';
+import { AddTradeDto, GetTradesDto, MakeRequestDto } from './dto';
 
 @Injectable()
 export class TradesService {
@@ -31,9 +31,9 @@ export class TradesService {
   ) { }
 
   async findAllMine(filter: GenericGetPokemonPaginatedDto, userId: number) {
-    
+
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
-      where:{
+      where: {
         collection: {
           user: { id: userId },
           pokemon: createPokemonWhereFilter(filter)
@@ -42,11 +42,11 @@ export class TradesService {
       relations: ['collection.pokemon',],
     })
   }
-  
+
   async findAll(filter: GetTradesDto, userId: number) {
-    
+
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
-      where:{
+      where: {
         collection: {
           user: { id: Not(userId) },
           pokemon: createPokemonWhereFilter(filter.iWantPokemon)
@@ -55,6 +55,44 @@ export class TradesService {
       },
       relations: ['collection.pokemon',],
     })
+  }
+
+  async makeRequest({ tradeId, collectionId }: MakeRequestDto, userId: number) {
+    await this.entityManager.transaction(async (transactionalEntityManager) => {
+      const tradeRepository = transactionalEntityManager.getRepository(Trade)
+      const trade = await tradeRepository.findOne({
+        where: { id: tradeId }
+      })
+      if (!trade) throw new BadRequestException("This trade doens't exists")
+      if (trade.collection.user.id == userId) throw new BadRequestException("You can't trade with yourself")
+
+      const collectionRepository = transactionalEntityManager.getRepository(Collection)
+      //is this pokemon in my collection?
+      const collection = await collectionRepository.findOne({
+        where: {
+          id: collectionId,
+          user: {
+            id: userId
+          }
+        }
+      })
+      if (!collection) throw new BadRequestException("You don't have this pokemon in your collection")
+
+      //is this pokemon in another request?
+      const tradeRequestRepository = transactionalEntityManager.getRepository(TradeRequest)
+      const request = await tradeRequestRepository.findOne({
+        where: {
+          collection
+        }
+      })
+      if (request) throw new BadRequestException("This pokemon is in another request")
+      //TODO: send notification
+      await tradeRequestRepository.save({
+        collection,
+        trade
+      })
+    })
+
   }
 
   async addTrade({ collectionId, pokemonsWanted }: AddTradeDto, userId: number) {
@@ -92,33 +130,33 @@ export class TradesService {
 
       await tradeRepository.save({
         collection,
-        pokemonsWanted:pokemons
+        pokemonsWanted: pokemons
       })
     })
   }
 
   async removeTrade(id: number, userId: number) {
-    const trade = await this.nonTransactionalTradeRepository.findOne({ 
-      where: { 
-        id, 
-        collection:{
-          user: {id:userId}
-        } 
-      } 
+    const trade = await this.nonTransactionalTradeRepository.findOne({
+      where: {
+        id,
+        collection: {
+          user: { id: userId }
+        }
+      }
     })
     if (!trade) return
     await this.nonTransactionalTradeRepository.delete(id)
-    
+
   }
-  
+
   async GetTrade(id: number) {
-    const trade = await this.nonTransactionalTradeRepository.findOne({ 
+    const trade = await this.nonTransactionalTradeRepository.findOne({
       where: { id },
       relations: ['collection.pokemon.types', 'pokemonsWanted']
     })
     if (!trade) throw new NotFoundException()
     return trade
-    
+
   }
 
 }

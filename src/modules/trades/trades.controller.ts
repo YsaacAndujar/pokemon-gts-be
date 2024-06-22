@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req } 
 import { TradesService } from './trades.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
-import { AddTradeDto, GetTradesDto } from './dto';
+import { AddTradeDto, GetTradesDto, MakeRequestDto } from './dto';
 
 @Controller('trades')
 @ApiTags('Trades')
@@ -24,6 +24,11 @@ export class TradesController {
   @Post('get-all-trades')
   async findAll(@Req() request, @Body() dto: GetTradesDto) {
     return await this.tradesService.findAll(dto, request.user.userId);
+  }
+  
+  @Post('make-request')
+  async makeRequest(@Req() request, @Body() dto: MakeRequestDto) {
+    return await this.tradesService.makeRequest(dto, request.user.userId);
   }
   
   @Delete('my-trades/:id')
