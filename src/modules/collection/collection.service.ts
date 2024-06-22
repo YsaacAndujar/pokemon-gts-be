@@ -34,7 +34,10 @@ export class CollectionService {
     })
   }
   async removePokemon(id: number, userId: number) {
-
+    const collection = await this.collectionRepository.findOne({ where: { id, user:{id:userId} } })
+    if (!collection) return
+    await this.collectionRepository.delete(id)
+    
   }
 
   async findAllMine(filter: GenericGetPokemonPaginated, userId: number) {
