@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { AddTradeDto } from './dto/add-trade.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, EntityManager, In } from 'typeorm'
+import { Repository, EntityManager, In, Not } from 'typeorm'
 import { Trade } from './entities';
 import { Collection } from '../collection/entities/collection.entity';
 import { PaginationService } from 'src/services';
@@ -9,6 +8,7 @@ import { User } from '../auth/entities';
 import { Pokemon } from '../pokemon-mockup/entities';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
+import { AddTradeDto, GetTradesDto } from './dto';
 
 @Injectable()
 export class TradesService {
@@ -38,6 +38,20 @@ export class TradesService {
           user: { id: userId },
           pokemon: createPokemonWhereFilter(filter)
         }
+      },
+      relations: ['collection.pokemon',],
+    })
+  }
+  
+  async findAll(filter: GetTradesDto, userId: number) {
+    
+    return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
+      where:{
+        collection: {
+          user: { id: Not(userId) },
+          pokemon: createPokemonWhereFilter(filter.iWantPokemon)
+        },
+        pokemonsWanted: createPokemonWhereFilter(filter.theyWantPokemon),
       },
       relations: ['collection.pokemon',],
     })

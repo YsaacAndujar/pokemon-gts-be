@@ -20,6 +20,12 @@ export class TradesController {
     return await this.tradesService.findAllMine(dto, request.user.userId);
   }
   
+  //has to be a post so I can have the filter, sorry :P
+  @Post('get-all-trades')
+  async findAll(@Req() request, @Body() dto: GetTradesDto) {
+    return await this.tradesService.findAll(dto, request.user.userId);
+  }
+  
   @Delete('my-trades/:id')
   async remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
     return await this.tradesService.removeTrade(id, request.user.userId);
