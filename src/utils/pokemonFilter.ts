@@ -1,9 +1,10 @@
 import { FindOptionsWhere, ILike } from 'typeorm';
-import { GenericGetPokemonPaginated } from "src/generic/dto";
+import { GenericGetPokemonDto } from "src/generic/dto";
 import { Pokemon } from 'src/modules/pokemon-mockup/entities';
 
-export const createPokemonWhereFilter = (filter: GenericGetPokemonPaginated) =>{
+export const createPokemonWhereFilter = (filter: GenericGetPokemonDto) =>{
     let where: FindOptionsWhere<Pokemon> = {};
+    if(!filter) return
     if (filter.id) {
       where.id = filter.id
     }

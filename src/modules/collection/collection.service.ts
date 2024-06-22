@@ -5,7 +5,7 @@ import { Collection } from './entities/collection.entity';
 import { Repository, FindOptionsWhere, ILike } from 'typeorm'
 import { User } from '../auth/entities';
 import { Pokemon } from '../pokemon-mockup/entities';
-import { GenericGetPokemonPaginated } from 'src/generic/dto';
+import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 import { PaginationService } from 'src/services';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
 
@@ -40,7 +40,7 @@ export class CollectionService {
     
   }
 
-  async findAllMine(filter: GenericGetPokemonPaginated, userId: number) {
+  async findAllMine(filter: GenericGetPokemonPaginatedDto, userId: number) {
     
     return await this.paginationService.paginate(this.collectionRepository, filter, {
       where:{

@@ -1,4 +1,5 @@
 import { GenericGetPaginatedDto } from "./GenericGetPaginated.dto";
-import { GenericGetPokemonPaginated } from "./GenericGetPokemonPaginated.dto";
+import { GenericGetPokemonDto } from "./GenericGetPokemon.dto";
+import { GenericGetPokemonPaginatedDto } from "./GenericGetPokemonPaginated.dto";
 
-export { GenericGetPaginatedDto, GenericGetPokemonPaginated }
+export { GenericGetPaginatedDto, GenericGetPokemonPaginatedDto, GenericGetPokemonDto }

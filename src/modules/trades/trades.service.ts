@@ -7,7 +7,7 @@ import { Collection } from '../collection/entities/collection.entity';
 import { PaginationService } from 'src/services';
 import { User } from '../auth/entities';
 import { Pokemon } from '../pokemon-mockup/entities';
-import { GenericGetPokemonPaginated } from 'src/generic/dto';
+import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class TradesService {
     private readonly entityManager: EntityManager,
   ) { }
 
-  async findAllMine(filter: GenericGetPokemonPaginated, userId: number) {
+  async findAllMine(filter: GenericGetPokemonPaginatedDto, userId: number) {
     
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
       where:{

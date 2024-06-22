@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
 import { TradesService } from './trades.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AddTradeDto } from './dto/add-trade.dto';
-import { GenericGetPokemonPaginated } from 'src/generic/dto';
+import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
+import { AddTradeDto, GetTradesDto } from './dto';
 
 @Controller('trades')
 @ApiTags('Trades')
@@ -16,7 +16,7 @@ export class TradesController {
   }
 
   @Get('my-trades')
-  async findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginated) {
+  async findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
     return await this.tradesService.findAllMine(dto, request.user.userId);
   }
   

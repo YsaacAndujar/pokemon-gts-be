@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository, } from '@nestjs/typeorm';
-import { GenericGetPokemonPaginated } from 'src/generic/dto';
+import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 import { PaginationService } from 'src/services';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
 import { In, Repository } from 'typeorm';
@@ -87,7 +87,7 @@ export class PokemonMockupService {
 
     }
     
-    async findAll(filter: GenericGetPokemonPaginated) {
+    async findAll(filter: GenericGetPokemonPaginatedDto) {
               
         return await this.paginationService.paginate(this.pokemonRepository, filter,{
             where: createPokemonWhereFilter(filter),
