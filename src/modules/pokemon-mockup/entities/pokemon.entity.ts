@@ -1,5 +1,6 @@
-import { Entity, PrimaryColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryColumn, Column, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import { PokemonType } from "./pokemonTypes.entity";
+import { Collection } from "src/modules/collection/entities/collection.entity";
 
 @Entity()
 export class Pokemon {
@@ -14,6 +15,9 @@ export class Pokemon {
 
     @ManyToMany(() => PokemonType, types => types.pokemons)
     @JoinTable()
-    types: PokemonType[];
+    types?: PokemonType[];
+
+    @OneToMany(() => Collection, collection => collection.pokemon)
+    collections?: Collection[];
 }
 

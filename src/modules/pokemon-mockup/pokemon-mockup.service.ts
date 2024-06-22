@@ -75,7 +75,6 @@ export class PokemonMockupService {
             id,
             name: data.name,
             sprite: data.sprites.front_default,
-            types: []
         }
         const types = await this.pokemonTypesRepository.find({
             where:{
