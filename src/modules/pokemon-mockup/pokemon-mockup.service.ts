@@ -105,4 +105,8 @@ export class PokemonMockupService {
             relations: ['types'],
         } )
       }
+    
+      async findAllTypes() {
+        return await this.pokemonTypesRepository.find()
+      }
 }

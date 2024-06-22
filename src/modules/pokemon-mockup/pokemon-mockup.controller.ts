@@ -21,4 +21,10 @@ export class PokemonMockupController {
   async findAll(@Query() dto: GetPaginatedPokemons) {
     return await this.pokemonMockupService.findAll(dto)
   }
+  
+  @Public()
+  @Get('types')
+  async findAllTypes() {
+    return await this.pokemonMockupService.findAllTypes()
+  }
 }
