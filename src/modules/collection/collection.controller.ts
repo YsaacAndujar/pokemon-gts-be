@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { AddPokemonDto } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GenericGetPokemonPaginated } from 'src/generic/dto';
 
 @Controller('collection')
 @ApiTags('Collection')
@@ -20,7 +21,7 @@ export class CollectionController {
   }
   
   @Get()
-  findAllMine(@Req() request) {
-    return this.collectionService.findAllMine(request.user.userId);
+  findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginated) {
+    return this.collectionService.findAllMine(dto, request.user.userId);
   }
 }
