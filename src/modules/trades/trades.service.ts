@@ -1,21 +1,20 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, EntityManager, In, Not } from 'typeorm'
-import { Trade, TradeRequest } from './entities';
-import { Collection } from '../collection/entities/collection.entity';
-import { PaginationService } from 'src/services';
-import { User } from '../auth/entities';
-import { Pokemon } from '../pokemon-mockup/entities';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
+import { PaginationService } from 'src/services';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
-import { AddTradeDto, GetTradesDto, MakeRequestDto } from './dto';
+import { EntityManager, In, Not, Repository } from 'typeorm';
+import { Collection } from '../collection/entities/collection.entity';
+import { Pokemon } from '../pokemon-mockup/entities';
+import { AddTradeDto, MakeRequestDto, MyTheirPokemonFilter } from './dto';
+import { Trade, TradeRequest } from './entities';
 
 @Injectable()
 export class TradesService {
   constructor(
     @InjectRepository(Trade)
     private readonly nonTransactionalTradeRepository: Repository<Trade>,
-    
+
     @InjectRepository(TradeRequest)
     private readonly nonTransactionalTradeRequestRepository: Repository<TradeRequest>,
 
@@ -24,7 +23,7 @@ export class TradesService {
     private readonly entityManager: EntityManager,
   ) { }
 
-  async findAllMine(filter: GenericGetPokemonPaginatedDto, userId: number) {
+  async findAllMyTrades(filter: GenericGetPokemonPaginatedDto, userId: number) {
 
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
       where: {
@@ -37,15 +36,20 @@ export class TradesService {
     })
   }
 
-  async findAll(filter: GetTradesDto, userId: number) {
+  async findAllMyRequests(filter: MyTheirPokemonFilter, userId: number) {
+
+    
+  }
+
+  async findAll(filter: MyTheirPokemonFilter, userId: number) {
 
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
       where: {
         collection: {
           user: { id: Not(userId) },
-          pokemon: createPokemonWhereFilter(filter.iWantPokemon)
+          pokemon: createPokemonWhereFilter(filter.myPokemon)
         },
-        pokemonsWanted: createPokemonWhereFilter(filter.theyWantPokemon),
+        pokemonsWanted: createPokemonWhereFilter(filter.theirPokemon),
       },
       relations: ['collection.pokemon',],
     })
@@ -143,7 +147,7 @@ export class TradesService {
     await this.nonTransactionalTradeRepository.delete(id)
 
   }
-  
+
   async removeRequest(id: number, userId: number) {
     const tradeRequest = await this.nonTransactionalTradeRequestRepository.findOne({
       where: {

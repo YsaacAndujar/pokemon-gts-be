@@ -4,16 +4,16 @@ import { IsOptional, ValidateNested } from 'class-validator';
 import { GenericGetPaginatedDto } from 'src/generic/dto';
 import { GenericGetPokemonDto } from 'src/generic/dto/GenericGetPokemon.dto';
 
-export class GetTradesDto extends GenericGetPaginatedDto{
+export class MyTheirPokemonFilter extends GenericGetPaginatedDto {
     @ApiProperty({ type: GenericGetPokemonDto, required: false })
     @IsOptional()
     @ValidateNested()
     @Type(() => GenericGetPokemonDto)
-    iWantPokemon?: GenericGetPokemonDto;
-    
+    myPokemon?: GenericGetPokemonDto;
+
     @ApiProperty({ type: GenericGetPokemonDto, required: false })
     @IsOptional()
     @ValidateNested()
     @Type(() => GenericGetPokemonDto)
-    theyWantPokemon?: GenericGetPokemonDto;
+    theirPokemon?: GenericGetPokemonDto;
 }
