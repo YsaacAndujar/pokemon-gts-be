@@ -21,9 +21,9 @@ export class TradesController {
   }
 
   //has to be a post so I can have the filter, sorry :P
-  @Post('get-my-requests')
-  async findAllMyRequests(@Req() request, @Body() dto: MyTheirPokemonFilter) {
-    return await this.tradesService.findAllMyRequests(dto, request.user.userId);
+  @Post('get-requests-for-me')
+  async findAllRequestsForMe(@Req() request, @Body() dto: MyTheirPokemonFilter) {
+    return await this.tradesService.findAllRequestsForMe(dto, request.user.userId);
   }
 
   //has to be a post so I can have the filter, sorry :P

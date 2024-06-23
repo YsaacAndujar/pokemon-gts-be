@@ -56,11 +56,14 @@ export class TradesService {
     return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
       where: {
         collection: {
-          user: { id: userId },
-          pokemon: createPokemonWhereFilter(filter.myPokemon)
+          pokemon: createPokemonWhereFilter(filter.theirPokemon)
         },
         trade: {
-          collection: createPokemonWhereFilter(filter.theirPokemon)
+          collection: {
+            user: { id: userId },
+            ...createPokemonWhereFilter(filter.myPokemon)
+          }
+
         },
       },
     })
