@@ -37,11 +37,36 @@ export class TradesService {
   }
 
   async findAllMyRequests(filter: MyTheirPokemonFilter, userId: number) {
-
     
+    return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
+      where: {
+        collection: {
+          user: { id: userId },
+          pokemon: createPokemonWhereFilter(filter.myPokemon)
+        },
+        trade: {
+          collection: createPokemonWhereFilter(filter.theirPokemon)
+        },
+      },
+    })
+  }
+  
+  async findAllRequestsForMe(filter: MyTheirPokemonFilter, userId: number) {
+    
+    return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
+      where: {
+        collection: {
+          user: { id: userId },
+          pokemon: createPokemonWhereFilter(filter.myPokemon)
+        },
+        trade: {
+          collection: createPokemonWhereFilter(filter.theirPokemon)
+        },
+      },
+    })
   }
 
-  async findAll(filter: MyTheirPokemonFilter, userId: number) {
+  async findAllTrades(filter: MyTheirPokemonFilter, userId: number) {
 
     return await this.paginationService.paginate(this.nonTransactionalTradeRepository, filter, {
       where: {

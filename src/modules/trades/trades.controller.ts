@@ -28,8 +28,8 @@ export class TradesController {
 
   //has to be a post so I can have the filter, sorry :P
   @Post('get-all-trades')
-  async findAll(@Req() request, @Body() dto: MyTheirPokemonFilter) {
-    return await this.tradesService.findAll(dto, request.user.userId);
+  async findAllTrades(@Req() request, @Body() dto: MyTheirPokemonFilter) {
+    return await this.tradesService.findAllTrades(dto, request.user.userId);
   }
 
   @Post('make-request')
