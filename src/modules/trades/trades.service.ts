@@ -15,17 +15,11 @@ export class TradesService {
   constructor(
     @InjectRepository(Trade)
     private readonly nonTransactionalTradeRepository: Repository<Trade>,
-
-    // @InjectRepository(Collection)
-    // private readonly collectionRepository: Repository<Collection>,
+    
+    @InjectRepository(TradeRequest)
+    private readonly nonTransactionalTradeRequestRepository: Repository<TradeRequest>,
 
     private readonly paginationService: PaginationService,
-
-    // @InjectRepository(User)
-    // private readonly userRepository: Repository<User>,
-
-    // @InjectRepository(Pokemon)
-    // private readonly pokemonRepository: Repository<Pokemon>,
 
     private readonly entityManager: EntityManager,
   ) { }
@@ -61,7 +55,8 @@ export class TradesService {
     await this.entityManager.transaction(async (transactionalEntityManager) => {
       const tradeRepository = transactionalEntityManager.getRepository(Trade)
       const trade = await tradeRepository.findOne({
-        where: { id: tradeId }
+        where: { id: tradeId },
+        relations: ['collection.user']
       })
       if (!trade) throw new BadRequestException("This trade doens't exists")
       if (trade.collection.user.id == userId) throw new BadRequestException("You can't trade with yourself")
@@ -145,6 +140,20 @@ export class TradesService {
       }
     })
     if (!trade) return
+    await this.nonTransactionalTradeRepository.delete(id)
+
+  }
+  
+  async removeRequest(id: number, userId: number) {
+    const tradeRequest = await this.nonTransactionalTradeRequestRepository.findOne({
+      where: {
+        id,
+        collection: {
+          user: { id: userId }
+        }
+      }
+    })
+    if (!tradeRequest) return
     await this.nonTransactionalTradeRepository.delete(id)
 
   }

@@ -32,8 +32,13 @@ export class TradesController {
   }
   
   @Delete('my-trades/:id')
-  async remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
+  async removeTrade(@Param('id', ParseIntPipe) id: number, @Req() request) {
     return await this.tradesService.removeTrade(id, request.user.userId);
+  }
+  
+  @Delete('my-requests/:id')
+  async removeRequest(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    return await this.tradesService.removeRequest(id, request.user.userId);
   }
 
   @Get('/:id')
