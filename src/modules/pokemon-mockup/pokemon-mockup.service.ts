@@ -96,6 +96,10 @@ export class PokemonMockupService {
       }
     
       async findAllTypes() {
-        return await this.pokemonTypesRepository.find()
+        return await this.pokemonTypesRepository.find({
+            order:{
+                name:'asc'
+            }
+        })
       }
 }
