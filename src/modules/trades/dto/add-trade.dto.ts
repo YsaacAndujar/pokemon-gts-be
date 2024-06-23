@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import { ArrayMaxSize, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 export class AddTradeDto {
     @ApiProperty({ required: true })
@@ -10,5 +10,6 @@ export class AddTradeDto {
     @ApiProperty({ type: [Number] })
     @IsOptional()
     @IsNumber({}, { each: true })
+    @ArrayMaxSize(10)
     pokemonsWanted: number[];
 }
