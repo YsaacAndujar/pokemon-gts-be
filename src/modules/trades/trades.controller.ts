@@ -47,6 +47,16 @@ export class TradesController {
     return await this.tradesService.removeRequest(id, request.user.userId);
   }
 
+  @Delete('decline-request/:id')
+  async declineTradeRequest(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    return await this.tradesService.declineTradeRequest(id, request.user.userId);
+  }
+  
+  @Post('accept-trade-request/:id')
+  async acceptTradeRequest(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    return await this.tradesService.acceptTradeRequest(id, request.user.userId);
+  }
+
   @Get('/:id')
   async GetTrade(@Param('id', ParseIntPipe) id: number) {
     return await this.tradesService.GetTrade(id);

@@ -189,6 +189,58 @@ export class TradesService {
     await this.nonTransactionalTradeRepository.delete(id)
 
   }
+  
+  async declineTradeRequest(id: number, userId: number) {
+    const tradeRequest = await this.nonTransactionalTradeRequestRepository.findOne({
+      where: {
+        id,
+        trade: {
+          collection: { id: userId }
+        }
+      }
+    })
+    if (!tradeRequest) return
+    await this.nonTransactionalTradeRepository.delete(id)
+
+  }
+  
+  async acceptTradeRequest(id: number, userId: number) {
+    await this.entityManager.transaction(async (transactionalEntityManager) => {
+      const tradeRequestRepository = transactionalEntityManager.getRepository(TradeRequest)
+      const request = await tradeRequestRepository.findOne({
+        where:{
+          id,
+          trade: {
+            collection:{
+              user:{
+                id: userId
+              }
+            }
+          }
+        }
+      })
+      if (request) throw new BadRequestException("This request doesn't exits anymore or it's not for you.")
+      
+        const collectionRepository = transactionalEntityManager.getRepository(Collection)
+        
+      await collectionRepository.update(
+        request.collection.id,
+        {
+          user: request.trade.collection.user
+        }
+      )
+      
+      await collectionRepository.update(
+        request.trade.collection.id,
+        {
+          user: request.collection.user
+        }
+      )
+      //TODO: notifications
+      await tradeRequestRepository.delete(request.trade.id)
+    })
+
+  }
 
   async GetTrade(id: number) {
     const trade = await this.nonTransactionalTradeRepository.findOne({
