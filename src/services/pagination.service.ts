@@ -23,11 +23,11 @@ export class PaginationService {
       queryOptions.order = { id: 'DESC' } as any;
     }
 
-    const [result, total] = await repository.findAndCount(queryOptions);
+    const [result, totalEntities] = await repository.findAndCount(queryOptions);
 
     return {
       result,
-      total,
+      totalEntities,
     };
   }
 }
