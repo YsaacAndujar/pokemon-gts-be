@@ -32,7 +32,7 @@ export class TradesService {
           pokemon: createPokemonWhereFilter(filter)
         }
       },
-      relations: ['collection.pokemon',],
+      relations: ['collection.pokemon.types',],
     })
   }
 

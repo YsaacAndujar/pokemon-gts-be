@@ -7,11 +7,11 @@ export class TradeRequest {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Trade, { cascade: true })
+    @ManyToOne(() => Trade, { onDelete: 'CASCADE' })
     @JoinTable()
     trade: Trade;
     
-    @OneToOne(() => Collection, { cascade: true })
+    @OneToOne(() => Collection, { onDelete: 'CASCADE' })
     @JoinTable()
     collection: Collection;
 }

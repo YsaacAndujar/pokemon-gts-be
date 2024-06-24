@@ -7,11 +7,11 @@ export class Trade {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => Collection, { cascade: true })
+    @OneToOne(() => Collection, { onDelete: 'CASCADE' })
     @JoinColumn()
     collection: Collection;
     
-    @ManyToMany(() => Pokemon, { cascade: true })
+    @ManyToMany(() => Pokemon, { onDelete: 'CASCADE' })
     @JoinTable()
     pokemonsWanted: Pokemon[];
 }
