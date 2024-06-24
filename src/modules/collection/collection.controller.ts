@@ -10,12 +10,12 @@ import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 export class CollectionController {
   constructor(private readonly collectionService: CollectionService) {}
 
-  @Post('add-pokemon')
+  @Post()
   async addPokemon(@Body() dto: AddPokemonDto, @Req() request) {
     return await this.collectionService.addPokemon(dto, request.user.userId);
   }
 
-  @Delete('remove-pokemon/:id')
+  @Delete('/:id')
   async remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
     return await this.collectionService.removePokemon(id, request.user.userId);
   }
@@ -23,5 +23,10 @@ export class CollectionController {
   @Get()
   async findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
     return await this.collectionService.findAllMine(dto, request.user.userId);
+  }
+
+  @Get('/:id')
+  async GetCollection(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    return await this.collectionService.GetCollection(id, request.user.userId);
   }
 }
