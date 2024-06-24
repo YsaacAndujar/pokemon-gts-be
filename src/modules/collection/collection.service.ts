@@ -47,7 +47,7 @@ export class CollectionService {
         user: { id: userId },
         pokemon: createPokemonWhereFilter(filter)
       },
-      relations: ['pokemon', 'pokemon.types'],
+      relations: ['pokemon', 'pokemon.types', 'trade'],
     })
   }
   
@@ -59,7 +59,7 @@ export class CollectionService {
           id: userId
         }
       },
-      relations: ['pokemon.types']
+      relations: ['pokemon.types', 'trade']
     })
     if(!collection) throw new NotFoundException('Collection not found')
       return collection
