@@ -50,4 +50,18 @@ export class CollectionService {
       relations: ['pokemon', 'pokemon.types'],
     })
   }
+  
+  async GetCollection(id: number, userId: number) {
+    const collection = await this.collectionRepository.findOne({
+      where:{
+        id,
+        user:{
+          id: userId
+        }
+      },
+      relations: ['pokemon.types']
+    })
+    if(!collection) throw new NotFoundException('Collection not found')
+      return collection
+  }
 }
