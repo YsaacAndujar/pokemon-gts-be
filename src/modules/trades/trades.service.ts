@@ -69,6 +69,26 @@ export class TradesService {
 
         },
       },
+      relations: ['collection.pokemon', 'trade.collection.pokemon']
+    })
+  }
+  
+  async findAllRequestsIMade(filter: MyTheirPokemonFilter, userId: number) {
+    return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
+      where: {
+        collection: {
+          pokemon: createPokemonWhereFilter(filter.myPokemon),
+          user: { id: userId },
+        },
+        trade: {
+          collection: {
+            pokemon:createPokemonWhereFilter(filter.theirPokemon)
+          }
+
+        },
+      },
+      relations: ['collection.pokemon', 'trade.collection.pokemon']
+
     })
   }
 
