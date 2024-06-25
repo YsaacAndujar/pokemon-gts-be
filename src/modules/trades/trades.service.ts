@@ -240,7 +240,7 @@ export class TradesService {
       }
     })
     if (!tradeRequest) return
-    await this.nonTransactionalTradeRepository.delete(id)
+    await this.nonTransactionalTradeRequestRepository.delete(id)
 
   }
   
