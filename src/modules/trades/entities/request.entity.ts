@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinTable, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinTable, OneToOne, JoinColumn } from 'typeorm';
 import { Trade } from './trade.entity';
 import { Collection } from 'src/modules/collection/entities/collection.entity';
 
@@ -11,7 +11,7 @@ export class TradeRequest {
     @JoinTable()
     trade: Trade;
     
-    @OneToOne(() => Collection, { onDelete: 'CASCADE' })
-    @JoinTable()
+    @OneToOne(() => Collection, collection => collection.tradeRequest, { onDelete: 'CASCADE' })
+    @JoinColumn()
     collection: Collection;
 }

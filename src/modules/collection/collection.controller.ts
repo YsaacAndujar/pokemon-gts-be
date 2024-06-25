@@ -24,6 +24,11 @@ export class CollectionController {
   async findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
     return await this.collectionService.findAllMine(dto, request.user.userId);
   }
+  
+  @Get('available')
+  async findAllMineAvailable(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
+    return await this.collectionService.findAllMineAvailable(dto, request.user.userId);
+  }
 
   @Get('/:id')
   async GetCollection(@Param('id', ParseIntPipe) id: number, @Req() request) {
