@@ -148,6 +148,15 @@ export class TradesService {
         }
       })
       if (collectionExitsInTrade) throw new BadRequestException('This pokemon is already in a trade')
+      
+        const tradeRequestRepository = transactionalEntityManager.getRepository(TradeRequest)
+      //is this pokemon in a request?
+      const collectionExitsInRequest = await tradeRequestRepository.findOne({
+        where: {
+          collection: { id: collectionId }
+        }
+      })
+      if (collectionExitsInRequest) throw new BadRequestException('This pokemon is already in a request')
 
       const pokemonRepository = transactionalEntityManager.getRepository(Pokemon)
       const pokemons = await pokemonRepository.find({
