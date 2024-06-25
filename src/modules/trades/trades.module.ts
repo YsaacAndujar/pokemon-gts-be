@@ -13,6 +13,7 @@ import { PaginationService } from 'src/services';
   providers: [TradesService, PaginationService],
   imports: [
     TypeOrmModule.forFeature([ Trade ]),
+    TypeOrmModule.forFeature([ Pokemon ]),
     TypeOrmModule.forFeature([ TradeRequest ]),
   ]
 })

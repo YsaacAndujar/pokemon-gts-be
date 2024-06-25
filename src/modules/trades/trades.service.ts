@@ -6,7 +6,7 @@ import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
 import { EntityManager, In, Not, Repository } from 'typeorm';
 import { Collection } from '../collection/entities/collection.entity';
 import { Pokemon } from '../pokemon-mockup/entities';
-import { AddTradeDto, MakeRequestDto, MyTheirPokemonFilter } from './dto';
+import { AddTradeDto, MakeRequestDto, MyTheirPokemonFilter, UpdateTradeDto } from './dto';
 import { Trade, TradeRequest } from './entities';
 
 @Injectable()
@@ -14,7 +14,10 @@ export class TradesService {
   constructor(
     @InjectRepository(Trade)
     private readonly nonTransactionalTradeRepository: Repository<Trade>,
-
+    
+    @InjectRepository(Pokemon)
+    private readonly pokemonRepository: Repository<Pokemon>,
+    
     @InjectRepository(TradeRequest)
     private readonly nonTransactionalTradeRequestRepository: Repository<TradeRequest>,
 
@@ -79,7 +82,7 @@ export class TradesService {
         },
         pokemonsWanted: createPokemonWhereFilter(filter.theirPokemon),
       },
-      relations: ['collection.pokemon',],
+      relations: ['collection.pokemon.types',],
     })
   }
 
@@ -173,6 +176,28 @@ export class TradesService {
     })
     if (!trade) return
     await this.nonTransactionalTradeRepository.delete(id)
+
+  }
+  
+  async patchTrade(id: number, {pokemonsWanted}: UpdateTradeDto, userId: number) {
+    let trade = await this.nonTransactionalTradeRepository.findOne({
+      where: {
+        id,
+        collection: {
+          user: { id: userId }
+        }
+      },
+      relations: ['pokemonsWanted']
+    })
+    if (!trade) throw new NotFoundException('Trade not founded')
+      const pokemons = await this.pokemonRepository.find({
+        where: {
+          id: In(pokemonsWanted)
+        }
+      })
+      if (pokemons.length != pokemonsWanted.length) throw new BadRequestException("Some pokemons wanted doesn't exists")
+    trade = {...trade, pokemonsWanted: pokemons} 
+    await this.nonTransactionalTradeRepository.save(trade)
 
   }
 
