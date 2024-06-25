@@ -19,7 +19,7 @@ export class TradesService {
     private readonly pokemonRepository: Repository<Pokemon>,
     
     @InjectRepository(TradeRequest)
-    private readonly nonTransactionalTradeRequestRepository: Repository<TradeRequest>,
+    private readonly nonTransactionalRequestRepository: Repository<TradeRequest>,
 
     private readonly paginationService: PaginationService,
 
@@ -41,7 +41,7 @@ export class TradesService {
 
   async findAllMyRequests(filter: MyTheirPokemonFilter, userId: number) {
     
-    return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
+    return await this.paginationService.paginate(this.nonTransactionalRequestRepository, filter, {
       where: {
         collection: {
           user: { id: userId },
@@ -56,7 +56,7 @@ export class TradesService {
   
   async findAllRequestsForMe(filter: MyTheirPokemonFilter, userId: number) {
     
-    return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
+    return await this.paginationService.paginate(this.nonTransactionalRequestRepository, filter, {
       where: {
         collection: {
           pokemon: createPokemonWhereFilter(filter.theirPokemon)
@@ -64,7 +64,7 @@ export class TradesService {
         trade: {
           collection: {
             user: { id: userId },
-            ...createPokemonWhereFilter(filter.myPokemon)
+            pokemon: createPokemonWhereFilter(filter.myPokemon)
           }
 
         },
@@ -74,7 +74,7 @@ export class TradesService {
   }
   
   async findAllRequestsIMade(filter: MyTheirPokemonFilter, userId: number) {
-    return await this.paginationService.paginate(this.nonTransactionalTradeRequestRepository, filter, {
+    return await this.paginationService.paginate(this.nonTransactionalRequestRepository, filter, {
       where: {
         collection: {
           pokemon: createPokemonWhereFilter(filter.myPokemon),
@@ -231,7 +231,7 @@ export class TradesService {
   }
 
   async removeRequest(id: number, userId: number) {
-    const tradeRequest = await this.nonTransactionalTradeRequestRepository.findOne({
+    const tradeRequest = await this.nonTransactionalRequestRepository.findOne({
       where: {
         id,
         collection: {
@@ -240,21 +240,25 @@ export class TradesService {
       }
     })
     if (!tradeRequest) return
-    await this.nonTransactionalTradeRequestRepository.delete(id)
+    await this.nonTransactionalRequestRepository.delete(id)
 
   }
   
   async declineTradeRequest(id: number, userId: number) {
-    const tradeRequest = await this.nonTransactionalTradeRequestRepository.findOne({
+    const tradeRequest = await this.nonTransactionalRequestRepository.findOne({
       where: {
         id,
         trade: {
-          collection: { id: userId }
+          collection: { 
+            user:{
+              id: userId 
+            }
+          }
         }
       }
     })
     if (!tradeRequest) return
-    await this.nonTransactionalTradeRepository.delete(id)
+    await this.nonTransactionalRequestRepository.delete(id)
 
   }
   
