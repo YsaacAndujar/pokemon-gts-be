@@ -265,6 +265,7 @@ export class TradesService {
   async acceptTradeRequest(id: number, userId: number) {
     await this.entityManager.transaction(async (transactionalEntityManager) => {
       const tradeRequestRepository = transactionalEntityManager.getRepository(TradeRequest)
+      const tradeRepository = transactionalEntityManager.getRepository(Trade)
       const request = await tradeRequestRepository.findOne({
         where:{
           id,
@@ -275,10 +276,10 @@ export class TradesService {
               }
             }
           }
-        }
+        },
+        relations: ['trade.collection.user', 'collection.user']
       })
-      if (request) throw new BadRequestException("This request doesn't exits anymore or it's not for you.")
-      
+      if (!request) throw new BadRequestException("This request doesn't exits anymore or it's not for you.")
         const collectionRepository = transactionalEntityManager.getRepository(Collection)
         
       await collectionRepository.update(
@@ -295,7 +296,7 @@ export class TradesService {
         }
       )
       //TODO: notifications
-      await tradeRequestRepository.delete(request.trade.id)
+      await tradeRepository.delete(request.trade.id)
     })
 
   }
