@@ -8,8 +8,8 @@ export class NotificationService {
         @Inject(HistoryGateway)
         private readonly historyGateway: HistoryGateway,
     ) {}
-    sendNotification(userId: number, history: History): void {
-        this.historyGateway.sendNotificationToUser(userId, history);
+    sendHistory(history: History): void {
+        this.historyGateway.sendHistory(history);
     }
 
 }

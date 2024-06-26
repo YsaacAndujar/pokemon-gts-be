@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
-import { PaginationService } from 'src/services';
+import { NotificationService, PaginationService } from 'src/services';
 import { createPokemonWhereFilter } from 'src/utils/pokemonFilter';
 import { EntityManager, In, Not, Repository } from 'typeorm';
 import { Collection } from '../collection/entities/collection.entity';
@@ -25,6 +25,8 @@ export class TradesService {
     private readonly paginationService: PaginationService,
 
     private readonly entityManager: EntityManager,
+    
+    private readonly notificationService: NotificationService,
   ) { }
 
   async findAllMyTrades(filter: GenericGetPokemonPaginatedDto, userId: number) {
@@ -296,16 +298,18 @@ export class TradesService {
           user: request.collection.user
         }
       )
-      await historyRepository.save({
+      this.notificationService.sendHistory(await historyRepository.save({
         myPokemon: request.collection.pokemon,
         hisPokemon: request.trade.collection.pokemon,
         user: request.collection.user,
-      })
+      }))
+      
       await historyRepository.save({
         hisPokemon: request.collection.pokemon,
         myPokemon: request.trade.collection.pokemon,
         user: request.trade.collection.user,
       })
+
       await tradeRepository.delete(request.trade.id)
     })
 

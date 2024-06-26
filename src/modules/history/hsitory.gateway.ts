@@ -6,6 +6,7 @@ import { History } from "./entities/history.entity";
 
 @WebSocketGateway({
     namespace: 'history',
+    cors:'*'
 })
 export class HistoryGateway implements OnGatewayInit  {
     private readonly clientSockets = new Map<number, Socket>();
@@ -32,10 +33,10 @@ export class HistoryGateway implements OnGatewayInit  {
         }
     }
 
-    sendNotificationToUser(userId: number, history: History): void {
-        const socket = this.clientSockets.get(userId);
+    sendHistory(history: History): void {
+        const socket = this.clientSockets.get(history.user.id);
         if (socket) {
-            socket.emit('notification', history); // Enviar mensaje al usuario a través del socket
+            socket.emit('notification', history);
         } 
     }
     
