@@ -8,6 +8,7 @@ import { PokemonMockupModule } from './modules/pokemon-mockup/pokemon-mockup.mod
 import { PaginationService } from './services';
 import { CollectionModule } from './modules/collection/collection.module';
 import { TradesModule } from './modules/trades/trades.module';
+import { HistoryModule } from './modules/history/history.module';
 
 @Module({
   imports: [AuthModule,
@@ -20,6 +21,7 @@ import { TradesModule } from './modules/trades/trades.module';
     PokemonMockupModule,
     CollectionModule,
     TradesModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [

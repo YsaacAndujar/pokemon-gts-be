@@ -11,7 +11,7 @@ export class Collection {
     @ManyToOne(() => Pokemon, pokemon => pokemon.collections, {onDelete: 'CASCADE'})
     pokemon: Pokemon;
 
-    @ManyToOne(() => User, user => user.userCodes, {onDelete: 'CASCADE'})
+    @ManyToOne(() => User, {onDelete: 'CASCADE'})
     user: User;
 
     @OneToOne(() => Trade, trade => trade.collection)
