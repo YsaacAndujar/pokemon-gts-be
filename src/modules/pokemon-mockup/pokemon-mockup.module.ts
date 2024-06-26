@@ -8,9 +8,9 @@ import { PaginationService } from 'src/services';
 @Module({
   controllers: [PokemonMockupController],
   providers: [PokemonMockupService, PaginationService],
-  imports:[
-    TypeOrmModule.forFeature([ Pokemon ]),
-    TypeOrmModule.forFeature([ PokemonType ]),
-  ]
+  imports: [
+    TypeOrmModule.forFeature([Pokemon]),
+    TypeOrmModule.forFeature([PokemonType]),
+  ],
 })
 export class PokemonMockupModule {}

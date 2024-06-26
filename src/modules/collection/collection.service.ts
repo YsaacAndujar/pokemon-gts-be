@@ -20,90 +20,103 @@ export class CollectionService {
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    
+
     @InjectRepository(TradeRequest)
     private readonly tradeRequestRepository: Repository<TradeRequest>,
-    
+
     @InjectRepository(Trade)
     private readonly tradeRepository: Repository<Trade>,
-    
+
     @InjectRepository(Pokemon)
     private readonly pokemonRepository: Repository<Pokemon>,
-  ) { }
+  ) {}
 
   async addPokemon({ pokemonId }: AddPokemonDto, userId: number) {
-    const user = await this.userRepository.findOne({ where: { id: userId } })
-    const pokemon = await this.pokemonRepository.findOne({ where: { id: pokemonId } })
-    if (!pokemon) throw new NotFoundException('Pokemon not found')
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const pokemon = await this.pokemonRepository.findOne({
+      where: { id: pokemonId },
+    });
+    if (!pokemon) throw new NotFoundException('Pokemon not found');
     this.collectionRepository.save({
       user,
-      pokemon
-    })
+      pokemon,
+    });
   }
   async removePokemon(id: number, userId: number) {
-    const collection = await this.collectionRepository.findOne({ where: { id, user:{id:userId} } })
-    if (!collection) return
-    await this.collectionRepository.delete(id)
-    
+    const collection = await this.collectionRepository.findOne({
+      where: { id, user: { id: userId } },
+    });
+    if (!collection) return;
+    await this.collectionRepository.delete(id);
   }
 
   async findAllMine(filter: GenericGetPokemonPaginatedDto, userId: number) {
-    
-    return await this.paginationService.paginate(this.collectionRepository, filter, {
-      where:{
-        user: { id: userId },
-        pokemon: createPokemonWhereFilter(filter)
+    return await this.paginationService.paginate(
+      this.collectionRepository,
+      filter,
+      {
+        where: {
+          user: { id: userId },
+          pokemon: createPokemonWhereFilter(filter),
+        },
+        relations: ['pokemon', 'pokemon.types', 'trade', 'tradeRequest'],
       },
-      relations: ['pokemon', 'pokemon.types', 'trade', 'tradeRequest'],
-    })
+    );
   }
-  
-  async findAllMineAvailable(filter: GenericGetPokemonPaginatedDto, userId: number) {
+
+  async findAllMineAvailable(
+    filter: GenericGetPokemonPaginatedDto,
+    userId: number,
+  ) {
     const tradeRequests = await this.tradeRequestRepository.find({
-      where:{
-        collection:{
-          user:{
-            id: userId
-          }
-        }
+      where: {
+        collection: {
+          user: {
+            id: userId,
+          },
+        },
       },
-      relations: ['collection']
-    })
+      relations: ['collection'],
+    });
     const trades = await this.tradeRepository.find({
-      where:{
-        collection:{
-          user:{
-            id: userId
-          }
-        }
+      where: {
+        collection: {
+          user: {
+            id: userId,
+          },
+        },
       },
-      relations: ['collection']
-    })
+      relations: ['collection'],
+    });
     const tradeRequestIds = [
-      ...tradeRequests.map((request) =>(request.collection.id)),
-      ...trades.map((trade) =>(trade.collection.id)),
-    ]
-    return await this.paginationService.paginate(this.collectionRepository, filter, {
-      where:{
-        user: { id: userId },
-        pokemon: createPokemonWhereFilter(filter),
-        id: Not(In(tradeRequestIds))
+      ...tradeRequests.map((request) => request.collection.id),
+      ...trades.map((trade) => trade.collection.id),
+    ];
+    return await this.paginationService.paginate(
+      this.collectionRepository,
+      filter,
+      {
+        where: {
+          user: { id: userId },
+          pokemon: createPokemonWhereFilter(filter),
+          id: Not(In(tradeRequestIds)),
+        },
+        relations: ['pokemon', 'pokemon.types', 'trade'],
       },
-      relations: ['pokemon', 'pokemon.types', 'trade'],
-    })
+    );
   }
-  
+
   async GetCollection(id: number, userId: number) {
     const collection = await this.collectionRepository.findOne({
-      where:{
+      where: {
         id,
-        user:{
-          id: userId
-        }
+        user: {
+          id: userId,
+        },
       },
-      relations: ['pokemon.types', 'trade', 'tradeRequest']
-    })
-    if(!collection) throw new NotFoundException('Collection not found')
-      return collection
+      relations: ['pokemon.types', 'trade', 'tradeRequest'],
+    });
+    if (!collection) throw new NotFoundException('Collection not found');
+    return collection;
   }
 }

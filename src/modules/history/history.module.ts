@@ -11,8 +11,6 @@ import { AuthGuard } from 'src/guards';
   controllers: [HistoryController],
   providers: [HistoryService, PaginationService, HistoryGateway, AuthGuard],
   exports: [HistoryGateway],
-  imports: [
-    TypeOrmModule.forFeature([ History ]),
-  ]
+  imports: [TypeOrmModule.forFeature([History])],
 })
 export class HistoryModule {}

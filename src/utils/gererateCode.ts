@@ -1,3 +1,3 @@
-export const generateCode = () =>{
-    return '0000'
-}
+export const generateCode = () => {
+  return '0000';
+};

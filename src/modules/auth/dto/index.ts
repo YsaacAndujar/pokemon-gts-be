@@ -6,10 +6,10 @@ import { ChangePasswordDto } from './change-password.dto';
 import { ChangePasswordByCodeDto } from './change-password-by-code.dto';
 
 export {
-    ChangePasswordByCodeDto,
-    ChangePasswordDto,
-    ForgotPasswordDto,
-    LoginDto,
-    SigninDto,
-    UpdateProfileDto,
-}
+  ChangePasswordByCodeDto,
+  ChangePasswordDto,
+  ForgotPasswordDto,
+  LoginDto,
+  SigninDto,
+  UpdateProfileDto,
+};

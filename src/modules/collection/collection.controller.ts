@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { AddPokemonDto } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -19,15 +29,24 @@ export class CollectionController {
   async remove(@Param('id', ParseIntPipe) id: number, @Req() request) {
     return await this.collectionService.removePokemon(id, request.user.userId);
   }
-  
+
   @Get()
-  async findAllMine(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
+  async findAllMine(
+    @Req() request,
+    @Query() dto: GenericGetPokemonPaginatedDto,
+  ) {
     return await this.collectionService.findAllMine(dto, request.user.userId);
   }
-  
+
   @Get('available')
-  async findAllMineAvailable(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
-    return await this.collectionService.findAllMineAvailable(dto, request.user.userId);
+  async findAllMineAvailable(
+    @Req() request,
+    @Query() dto: GenericGetPokemonPaginatedDto,
+  ) {
+    return await this.collectionService.findAllMineAvailable(
+      dto,
+      request.user.userId,
+    );
   }
 
   @Get('/:id')

@@ -1,3 +1,3 @@
-import { AddPokemonDto } from "./add-pokemon.dto";
+import { AddPokemonDto } from './add-pokemon.dto';
 
-export { AddPokemonDto }
+export { AddPokemonDto };

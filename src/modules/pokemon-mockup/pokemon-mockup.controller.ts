@@ -4,7 +4,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/decorators/public.decorator';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
 
-
 @Controller('pokemon-mockup')
 @ApiTags('Pokemon Mockup')
 @ApiBearerAuth()
@@ -14,16 +13,16 @@ export class PokemonMockupController {
   @Public()
   @Post('seed')
   async login() {
-    return await this.pokemonMockupService.seed()
+    return await this.pokemonMockupService.seed();
   }
-  
+
   @Get()
   async findAll(@Query() dto: GenericGetPokemonPaginatedDto) {
-    return await this.pokemonMockupService.findAll(dto)
+    return await this.pokemonMockupService.findAll(dto);
   }
-  
+
   @Get('types')
   async findAllTypes() {
-    return await this.pokemonMockupService.findAllTypes()
+    return await this.pokemonMockupService.findAllTypes();
   }
 }

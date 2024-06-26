@@ -3,4 +3,4 @@ import { MyTheirPokemonFilter } from './my-their-pokemon-filter.dto';
 import { MakeRequestDto } from './make-request.dto';
 import { UpdateTradeDto } from './update-trade.dto';
 
-export { AddTradeDto, MyTheirPokemonFilter, MakeRequestDto, UpdateTradeDto }
+export { AddTradeDto, MyTheirPokemonFilter, MakeRequestDto, UpdateTradeDto };

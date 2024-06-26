@@ -9,13 +9,13 @@ import { User, UserCode } from './entities';
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
-    TypeOrmModule.forFeature([ User ]),
-    TypeOrmModule.forFeature([ UserCode ]),
+    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([UserCode]),
     JwtModule.register({
       global: true,
       secret: process.env.PRIVATE_KEY,
       signOptions: { expiresIn: process.env.EXPIRES_IN },
     }),
-  ]
+  ],
 })
 export class AuthModule {}

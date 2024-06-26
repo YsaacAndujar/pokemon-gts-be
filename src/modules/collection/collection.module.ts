@@ -12,12 +12,12 @@ import { Trade } from '../trades/entities';
 @Module({
   controllers: [CollectionController],
   providers: [CollectionService, PaginationService],
-  imports:[
-    TypeOrmModule.forFeature([ Collection ]),
-    TypeOrmModule.forFeature([ Trade ]),
-    TypeOrmModule.forFeature([ Pokemon ]),
-    TypeOrmModule.forFeature([ TradeRequest ]),
-    TypeOrmModule.forFeature([ User ]),
-]
+  imports: [
+    TypeOrmModule.forFeature([Collection]),
+    TypeOrmModule.forFeature([Trade]),
+    TypeOrmModule.forFeature([Pokemon]),
+    TypeOrmModule.forFeature([TradeRequest]),
+    TypeOrmModule.forFeature([User]),
+  ],
 })
 export class CollectionModule {}

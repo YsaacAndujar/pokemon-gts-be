@@ -13,6 +13,4 @@ export class HistoryController {
   async findAll(@Req() request, @Query() dto: GenericGetPaginatedDto) {
     return await this.historyService.findAll(dto, request.user.userId);
   }
-
-
 }

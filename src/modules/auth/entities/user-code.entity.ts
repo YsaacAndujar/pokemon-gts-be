@@ -1,18 +1,18 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity()
 export class UserCode {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => User, user => user.userCodes)
-    user: User;
+  @ManyToOne(() => User, (user) => user.userCodes)
+  user: User;
 
-    @Column('text')
-    code: string
+  @Column('text')
+  code: string;
 
-    //sqlite does not support date
-    @Column('text')
-    expires: Date
+  //sqlite does not support date
+  @Column('text')
+  expires: Date;
 }

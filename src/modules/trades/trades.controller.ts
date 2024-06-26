@@ -1,14 +1,30 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { TradesService } from './trades.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { GenericGetPokemonPaginatedDto } from 'src/generic/dto';
-import { AddTradeDto, MakeRequestDto, MyTheirPokemonFilter, UpdateTradeDto } from './dto';
+import {
+  AddTradeDto,
+  MakeRequestDto,
+  MyTheirPokemonFilter,
+  UpdateTradeDto,
+} from './dto';
 
 @Controller('trades')
 @ApiTags('Trades')
 @ApiBearerAuth()
 export class TradesController {
-  constructor(private readonly tradesService: TradesService) { }
+  constructor(private readonly tradesService: TradesService) {}
 
   @Post('add-trade')
   async addTrade(@Body() dto: AddTradeDto, @Req() request) {
@@ -16,20 +32,35 @@ export class TradesController {
   }
 
   @Get('my-trades')
-  async findAllMyTrades(@Req() request, @Query() dto: GenericGetPokemonPaginatedDto) {
+  async findAllMyTrades(
+    @Req() request,
+    @Query() dto: GenericGetPokemonPaginatedDto,
+  ) {
     return await this.tradesService.findAllMyTrades(dto, request.user.userId);
   }
 
   //has to be a post so I can have the filter, sorry :P
   @Post('get-requests-for-me')
-  async findAllRequestsForMe(@Req() request, @Body() dto: MyTheirPokemonFilter) {
-    return await this.tradesService.findAllRequestsForMe(dto, request.user.userId);
+  async findAllRequestsForMe(
+    @Req() request,
+    @Body() dto: MyTheirPokemonFilter,
+  ) {
+    return await this.tradesService.findAllRequestsForMe(
+      dto,
+      request.user.userId,
+    );
   }
-  
+
   //has to be a post so I can have the filter, sorry :P
   @Post('get-requests-i-made')
-  async findAllRequestsIMade(@Req() request, @Body() dto: MyTheirPokemonFilter) {
-    return await this.tradesService.findAllRequestsIMade(dto, request.user.userId);
+  async findAllRequestsIMade(
+    @Req() request,
+    @Body() dto: MyTheirPokemonFilter,
+  ) {
+    return await this.tradesService.findAllRequestsIMade(
+      dto,
+      request.user.userId,
+    );
   }
 
   //has to be a post so I can have the filter, sorry :P
@@ -47,9 +78,13 @@ export class TradesController {
   async removeTrade(@Param('id', ParseIntPipe) id: number, @Req() request) {
     return await this.tradesService.removeTrade(id, request.user.userId);
   }
-  
+
   @Patch('my-trades/:id')
-  async patchTrade(@Param('id', ParseIntPipe) id: number, @Req() request, @Body() dto: UpdateTradeDto) {
+  async patchTrade(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request,
+    @Body() dto: UpdateTradeDto,
+  ) {
     return await this.tradesService.patchTrade(id, dto, request.user.userId);
   }
 
@@ -59,12 +94,21 @@ export class TradesController {
   }
 
   @Delete('decline-request/:id')
-  async declineTradeRequest(@Param('id', ParseIntPipe) id: number, @Req() request) {
-    return await this.tradesService.declineTradeRequest(id, request.user.userId);
+  async declineTradeRequest(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request,
+  ) {
+    return await this.tradesService.declineTradeRequest(
+      id,
+      request.user.userId,
+    );
   }
-  
+
   @Post('accept-trade-request/:id')
-  async acceptTradeRequest(@Param('id', ParseIntPipe) id: number, @Req() request) {
+  async acceptTradeRequest(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request,
+  ) {
     return await this.tradesService.acceptTradeRequest(id, request.user.userId);
   }
 

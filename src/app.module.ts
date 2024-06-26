@@ -11,7 +11,8 @@ import { TradesModule } from './modules/trades/trades.module';
 import { HistoryModule } from './modules/history/history.module';
 
 @Module({
-  imports: [AuthModule,
+  imports: [
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: './database.sqlite',
