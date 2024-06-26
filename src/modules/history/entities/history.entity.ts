@@ -17,7 +17,4 @@ export class History {
     @ManyToOne(() => User, {onDelete: 'CASCADE'})
     user: User;
     
-    @Column('boolean')
-    isMyRequest: boolean
-
 }

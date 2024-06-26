@@ -300,13 +300,11 @@ export class TradesService {
         myPokemon: request.collection.pokemon,
         hisPokemon: request.trade.collection.pokemon,
         user: request.collection.user,
-        isMyRequest: true
       })
       await historyRepository.save({
         hisPokemon: request.collection.pokemon,
         myPokemon: request.trade.collection.pokemon,
         user: request.trade.collection.user,
-        isMyRequest: false
       })
       await tradeRepository.delete(request.trade.id)
     })
