@@ -8,16 +8,16 @@ export class History {
     @PrimaryGeneratedColumn()
     id: number;
     
-    @ManyToOne(() => Pokemon, pokemon => pokemon.collections, {onDelete: 'CASCADE'})
+    @ManyToOne(() => Pokemon, {onDelete: 'CASCADE'})
     myPokemon: Pokemon;
 
-    @ManyToOne(() => Pokemon, pokemon => pokemon.collections, {onDelete: 'CASCADE'})
+    @ManyToOne(() => Pokemon, {onDelete: 'CASCADE'})
     hisPokemon: Pokemon;
 
     @ManyToOne(() => User, {onDelete: 'CASCADE'})
     user: User;
     
     @Column('boolean')
-    myTrade: boolean
+    isMyRequest: boolean
 
 }

@@ -8,6 +8,7 @@ import { Collection } from '../collection/entities/collection.entity';
 import { Pokemon } from '../pokemon-mockup/entities';
 import { AddTradeDto, MakeRequestDto, MyTheirPokemonFilter, UpdateTradeDto } from './dto';
 import { Trade, TradeRequest } from './entities';
+import { History } from '../history/entities/history.entity';
 
 @Injectable()
 export class TradesService {
@@ -136,7 +137,6 @@ export class TradesService {
         }
       })
       if (request) throw new BadRequestException("This pokemon is in another request")
-      //TODO: send notification
       await tradeRequestRepository.save({
         collection,
         trade
@@ -266,6 +266,7 @@ export class TradesService {
     await this.entityManager.transaction(async (transactionalEntityManager) => {
       const tradeRequestRepository = transactionalEntityManager.getRepository(TradeRequest)
       const tradeRepository = transactionalEntityManager.getRepository(Trade)
+      const historyRepository = transactionalEntityManager.getRepository(History)
       const request = await tradeRequestRepository.findOne({
         where:{
           id,
@@ -277,7 +278,7 @@ export class TradesService {
             }
           }
         },
-        relations: ['trade.collection.user', 'collection.user']
+        relations: ['trade.collection.user', 'collection.user', 'collection.pokemon', 'trade.collection.pokemon']
       })
       if (!request) throw new BadRequestException("This request doesn't exits anymore or it's not for you.")
         const collectionRepository = transactionalEntityManager.getRepository(Collection)
@@ -295,7 +296,18 @@ export class TradesService {
           user: request.collection.user
         }
       )
-      //TODO: notifications
+      await historyRepository.save({
+        myPokemon: request.collection.pokemon,
+        hisPokemon: request.trade.collection.pokemon,
+        user: request.collection.user,
+        isMyRequest: true
+      })
+      await historyRepository.save({
+        hisPokemon: request.collection.pokemon,
+        myPokemon: request.trade.collection.pokemon,
+        user: request.trade.collection.user,
+        isMyRequest: false
+      })
       await tradeRepository.delete(request.trade.id)
     })
 

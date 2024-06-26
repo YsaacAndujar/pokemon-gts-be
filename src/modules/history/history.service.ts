@@ -19,6 +19,7 @@ export class HistoryService {
       where:{
         user: { id: userId },
       },
+      relations:['myPokemon', 'hisPokemon']
     })
   }
 
