@@ -85,4 +85,16 @@ import {
       const [type, token] = headers.authorization?.split(' ') ?? []
       return type === 'Bearer' ? token : undefined
     }
+
+    async getUserIdFromToken(token:string){
+      let payload
+      try{
+          payload = await this._jwtService.verifyAsync(token, {
+            secret: process.env.PRIVATE_KEY,
+          })
+      }catch{
+        throw new UnauthorizedException()
+      }
+      return payload.userId
+    }
 }
