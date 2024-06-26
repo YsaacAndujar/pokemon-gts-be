@@ -4,7 +4,7 @@ import { GenericGetPaginatedDto } from 'src/generic/dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('history')
-@ApiTags('Controller')
+@ApiTags('History')
 @ApiBearerAuth()
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) {}
