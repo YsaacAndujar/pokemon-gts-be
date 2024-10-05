@@ -7,7 +7,8 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text', {
+  @Column('varchar', {
+    length: 255, // Especificar la longitud máxima
     unique: true,
   })
   username: string;
