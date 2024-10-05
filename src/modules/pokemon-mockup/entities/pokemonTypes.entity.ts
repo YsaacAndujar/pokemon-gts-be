@@ -6,7 +6,10 @@ export class PokemonType {
   @PrimaryColumn()
   id: number;
 
-  @Column('text', { unique: true })
+  @Column('varchar', {
+    length: 255, // Especificar la longitud máxima
+    unique: true,
+  })
   name: string;
 
   @ManyToMany(() => Pokemon, (pokemon) => pokemon.types)
