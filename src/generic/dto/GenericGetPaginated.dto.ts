@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, Min, min } from 'class-validator';
 
 export class GenericGetPaginatedDto {
-  @ApiProperty({ default: 0, required: false })
+  @ApiProperty({ default: 1, required: false })
   @IsOptional()
   @IsNotEmpty()
-  page?: number = 0;
+  @Min(1)
+  page?: number = 1;
 
   @ApiProperty({ default: 10, required: false })
   @IsOptional()
