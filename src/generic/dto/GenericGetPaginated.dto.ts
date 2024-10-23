@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, Min, min } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, Min, min } from 'class-validator';
 
 export class GenericGetPaginatedDto {
   @ApiProperty({ default: 1, required: false })
   @IsOptional()
   @IsNotEmpty()
   @Min(1)
+  @IsInt()
+  @Transform((param) => parseInt(param.value))
   page?: number = 1;
 
   @ApiProperty({ default: 10, required: false })
