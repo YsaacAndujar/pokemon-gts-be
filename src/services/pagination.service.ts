@@ -16,7 +16,7 @@ export class PaginationService {
 
     const queryOptions: FindManyOptions<T> = {
       ...findManyOptions,
-      take: take,
+      take,
       skip: (page - 1) * take,
     };
 

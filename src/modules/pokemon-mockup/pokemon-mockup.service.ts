@@ -57,7 +57,7 @@ export class PokemonMockupService {
 
   async insertPokemons() {
     const promises = [];
-    for (let i = 1; i <= 700; i++) {
+    for (let i = 1; i <= 151; i++) {
       promises.push(this.fecthSavePokemon(i));
     }
 
